@@ -15,20 +15,33 @@ export class AppService {
     this.dataSource = dataSource;
   }
 
+  parseSearchTerm(termList: string[]) {
+    let searchString = '';
+    termList.map((value, idx) => {
+      if (idx === termList.length - 1) {
+        searchString += `name LIKE '%${value}%'`;
+      } else {
+        searchString += `name LIKE '%${value}%' OR
+        
+        `;
+      }
+    });
+    return searchString;
+  }
+
   async extractEntities(searchTerm: string) {
     // Split the searchTerm into words
     const terms = searchTerm.split(/\s+/);
-    console.log('🚀 ~ AppService ~ extractEntities ~ terms:', terms);
 
     // Create a single query using UNION ALL to check all entities
     const query = `
-    SELECT id,name,  'city' as 'type'  FROM city WHERE name IN (${terms.map((value) => `'${value}'`)})
+    SELECT id,name,  'city' as 'type'  FROM city WHERE ${this.parseSearchTerm(terms)}
     UNION ALL
-    SELECT id,name, 'brand' as 'type' FROM brand WHERE name IN (${terms.map((value) => `'${value}'`)})
+    SELECT id,name, 'brand' as 'type' FROM brand WHERE ${this.parseSearchTerm(terms)}
     UNION ALL
-    SELECT id,name, 'dishType' as 'type' FROM dish_type WHERE name IN (${terms.map((value) => `'${value}'`)})
+    SELECT id,name, 'dishType' as 'type' FROM dish_type WHERE ${this.parseSearchTerm(terms)}
     UNION ALL
-    SELECT id,name, 'diet' as 'type' FROM diet WHERE name IN (${terms.map((value) => `'${value}'`)})
+    SELECT id,name, 'diet' as 'type' FROM diet WHERE ${this.parseSearchTerm(terms)}
   `;
 
     const result = await this.dataSource.query(query, terms);
