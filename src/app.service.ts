@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
+import { EntityType } from './types/entity.type';
 
 @Injectable()
 export class AppService {
@@ -25,7 +26,7 @@ export class AppService {
     return searchString;
   }
 
-  async extractEntities(searchTerm: string) {
+  async extractEntities(searchTerm: string): Promise<EntityType[]> {
     // Split the searchTerm into words
     const terms = searchTerm.split(/\s+/);
 
@@ -42,6 +43,6 @@ export class AppService {
 
     const result = await this.dataSource.query(query, terms);
 
-    return result;
+    return result as EntityType[];
   }
 }
