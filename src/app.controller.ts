@@ -3,7 +3,9 @@ import { AppService } from './app.service';
 import { ExtractEntitiesQueryDto } from './dto/extract-entities-query.dto';
 import { EntityMapper } from './mappers/entity.mapper';
 import { ExtractEntitiesResponseDto } from './dto/extract-entities-response.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Challenge')
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}

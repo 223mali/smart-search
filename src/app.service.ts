@@ -12,7 +12,7 @@ export class AppService {
     this.dataSource = dataSource;
   }
 
-  parseSearchTerm(termList: string[]) {
+  buildSearchTerm(termList: string[]) {
     let searchString = '';
     termList.map((value, idx) => {
       if (idx === termList.length - 1) {
@@ -27,19 +27,19 @@ export class AppService {
   }
 
   async extractEntities(searchTerm: string): Promise<EntityType[]> {
-    // Split the searchTerm into words
+    // Split the searchTerm into words and filter out words with less than 3 characters
     const terms = searchTerm.split(/\s+/);
     const filteredTerms = terms.filter((term) => term.length > 2);
 
     // Create a single query using UNION ALL to check all entities
     const query = `
-    SELECT id,name,  'city' as 'type'  FROM city WHERE ${this.parseSearchTerm(filteredTerms)}
+    SELECT id,name,  'city' as 'type'  FROM city WHERE ${this.buildSearchTerm(filteredTerms)}
     UNION ALL
-    SELECT id,name, 'brand' as 'type' FROM brand WHERE ${this.parseSearchTerm(filteredTerms)}
+    SELECT id,name, 'brand' as 'type' FROM brand WHERE ${this.buildSearchTerm(filteredTerms)}
     UNION ALL
-    SELECT id,name, 'dishType' as 'type' FROM dish_type WHERE ${this.parseSearchTerm(filteredTerms)}
+    SELECT id,name, 'dishType' as 'type' FROM dish_type WHERE ${this.buildSearchTerm(filteredTerms)}
     UNION ALL
-    SELECT id,name, 'diet' as 'type' FROM diet WHERE ${this.parseSearchTerm(filteredTerms)}
+    SELECT id,name, 'diet' as 'type' FROM diet WHERE ${this.buildSearchTerm(filteredTerms)}
   `;
 
     const result = await this.dataSource.query(query, filteredTerms);
