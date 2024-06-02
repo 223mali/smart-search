@@ -3,11 +3,28 @@ import { EntityType } from 'src/types/entity.type';
 
 export class EntityMapper {
   static mapEntities(entities: EntityType[]): ExtractEntitiesResponseDto[] {
-    const newList = entities.map((entity) => {
-      const type = entity.type;
+    const grouping = {};
+    const newList = [];
+    const duplicateItems = [];
+    entities.map((entity) => {
+      if (grouping[entity.type]) {
+        duplicateItems.push(entity);
+        return;
+      }
+      const entityType = entity.type;
       delete entity.type;
-      return { [type]: entity };
+      grouping[entityType] = entity;
     });
+    newList.push(grouping);
+
+    duplicateItems.map((entity) => {
+      const entityType = entity.type;
+
+      delete entity.type;
+
+      newList.push({ ...grouping, [entityType]: entity });
+    });
+
     return newList;
   }
 }
