@@ -41,6 +41,8 @@ $ yarn start:dev
 $ yarn start:prod
 ```
 
+http://localhost:3000/docs
+
 ## License
 
 Nest is [MIT licensed](LICENSE).
