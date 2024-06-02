@@ -13,7 +13,7 @@ export class AppController {
     const entities = await this.appService.extractEntities(
       requestQueryParams.searchTerm,
     );
-    console.log('🚀 ~ AppController ~ search ~ entities:', entities);
+
     return entities;
   }
 }

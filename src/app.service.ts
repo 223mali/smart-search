@@ -1,9 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { DataSource, In } from 'typeorm';
-import { City } from './models/city.entity';
-import { Brand } from './models/brand.entity';
-import { DishType } from './models/dish-type.entity';
-import { Diet } from './models/diet.entity';
+import { DataSource } from 'typeorm';
 
 @Injectable()
 export class AppService {
