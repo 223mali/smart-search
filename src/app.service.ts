@@ -19,20 +19,15 @@ export class AppService {
     // Split the searchTerm into words
     const terms = searchTerm.split(/\s+/);
     console.log('🚀 ~ AppService ~ extractEntities ~ terms:', terms);
-    const placeholders = terms.map((_, index) => _).join(', ');
 
-    console.log(
-      '🚀 ~ AppService ~ extractEntities ~ placeholders:',
-      placeholders,
-    );
     // Create a single query using UNION ALL to check all entities
     const query = `
     SELECT id,name,  'city' as 'type'  FROM city WHERE name IN (${terms.map((value) => `'${value}'`)})
-    UNION
+    UNION ALL
     SELECT id,name, 'brand' as 'type' FROM brand WHERE name IN (${terms.map((value) => `'${value}'`)})
-    UNION
+    UNION ALL
     SELECT id,name, 'dishType' as 'type' FROM dish_type WHERE name IN (${terms.map((value) => `'${value}'`)})
-    UNION
+    UNION ALL
     SELECT id,name, 'diet' as 'type' FROM diet WHERE name IN (${terms.map((value) => `'${value}'`)})
   `;
 
